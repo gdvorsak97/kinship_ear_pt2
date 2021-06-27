@@ -5,7 +5,8 @@ from torch.utils.data import Dataset
 
 
 class KinDataset(Dataset):
-    # TODO: make sure data is organised correctly or try to use the same methods as in kinship
+    # may have to use load_data from datasets.py
+    # TODO: make sure data is organised correctly or try to use the same methods as in kinship_ear
     def __init__(self, relations, person_to_images_map, transform=None):
         self.relations = relations
         self.transform = transform
