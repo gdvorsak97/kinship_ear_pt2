@@ -17,37 +17,76 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 
 # Get all images and split them into train and validation set
-# TODO: change according to kinship_ear
 print("Prepare data...")
-train_file_path = "data/train_relationships.csv"
-train_folders_path = "data/train/"
-val_famillies = "F09"
+train_file_path = "D:/Files on Desktop/engine/fax/magistrska naloga/Ankitas Ears/train_list.csv"
+train_folders_path = "D:/Files on Desktop/engine/fax/magistrska naloga/Ankitas Ears/train/"
+val_famillies = ["family10", "family4"]
 
-all_images = glob(train_folders_path + "*/*/*.jpg")
+all_images = glob(train_folders_path + '/*/*/*.jpg')
+all_images = [x.replace("\\", "/") for x in all_images]
+all_files = [str(i).split("/")[-1][:-4] for i in all_images]
 
-train_images = [x for x in all_images if val_famillies not in x]
-val_images = [x for x in all_images if val_famillies in x]
+# Filter step fOr bounding boxes
+delete_path = "D:\\Files on Desktop\\engine\\fax\\magistrska naloga\\Ankitas Ears\\bounding boxes alligment" \
+              "\\delete list.txt"
+delete_file = pd.read_csv(delete_path, delimiter=";")
+FILTERS = "maj_oob,mnr_oob,blr,ilu,drk,grn,lbl"
+filters = FILTERS.replace(" ", "")
+filters = filters.split(",")
+deleted = []
+for i in all_files:
+    check = delete_file["filename"] == i
+    check = list(np.where(check)[0])
+    if len(check) != 0:
+        d_fs = delete_file["filter"].iloc[check]
+        current_f = list(d_fs.values)[0].split(',')
+        for f in current_f:
+            if f in filters:
+                to_delete = all_files.index(i)
+                deleted.append(to_delete)
+                break
+
+# delete filtered from all images
+all_images = [all_images[i] for i in range(len(all_images)) if i not in deleted]
+
+train_images = []
+val_images = []
+for x in all_images:
+    for i in range(len(val_famillies)):
+        if val_famillies[i] not in x:
+            train_images.append(x)
+        elif val_famillies[i] in x:
+            val_images.append(x)
 
 train_person_to_images_map = defaultdict(list)
-
-ppl = [x.split("/")[-3] + "/" + x.split("/")[-2] for x in all_images]
-
+ppl = [x.split("/")[-3] + "/" + x.split("/")[-2] for x in all_images]  # family/person
 for x in train_images:
+    # append train image to the person in the above format
     train_person_to_images_map[x.split("/")[-3] + "/" + x.split("/")[-2]].append(x)
 
+# similar but validation
 val_person_to_images_map = defaultdict(list)
-
 for x in val_images:
+    # same as above but val images
     val_person_to_images_map[x.split("/")[-3] + "/" + x.split("/")[-2]].append(x)
 
+# get pairs from csv to a zipped list
 relationships = pd.read_csv(train_file_path)
 relationships = list(zip(relationships.p1.values, relationships.p2.values))
+# validate for people
 relationships = [x for x in relationships if x[0] in ppl and x[1] in ppl]
 
-train_relations = [x for x in relationships if val_famillies not in x[0]]
-val_relations = [x for x in relationships if val_famillies in x[0]]
+# get train and val relationship list
+train_relations = []
+val_relations = []
 
-# up to here it's very similar to kinship_ear
+for i in range(len(val_famillies)):
+    for x in relationships:
+        if val_famillies[i] not in x[0]:
+            train_relations.append(x)
+        elif val_famillies[i] in x[0]:
+            val_relations.append(x)
+
 
 # Prepare data loaders
 # TODO: check the augmentation layers in kinship_ear and apply here
