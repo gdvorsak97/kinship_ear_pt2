@@ -1,12 +1,14 @@
 from random import choice
 
+import cv2
 from PIL import Image
 from torch.utils.data import Dataset
+
+from kinship_utils import read_img
 
 
 class KinDataset(Dataset):
     # may have to use load_data from datasets.py
-    # TODO: make sure data is organised correctly or try to use the same methods as in kinship_ear
     def __init__(self, relations, person_to_images_map, transform=None):
         self.relations = relations
         self.transform = transform
@@ -27,12 +29,31 @@ class KinDataset(Dataset):
 
         path1, path2 = choice(self.person_to_images_map[p1]), choice(self.person_to_images_map[p2])
 
-        # TODO: switch the image reading with the method from main repo,
-        #  put the methods in a utils.py file and import them here
-        img1, img2 = Image.open(path1), Image.open(path2)
+        """
+        #cv2 -> pil
+        img = cv2.imread("path/to/img.png")
+
+        # You may need to convert the color.
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        im_pil = Image.fromarray(img)
+        
+        # For reversing the operation:
+        im_np = np.asarray(im_pil)
+        """
+
+        # TODO: test color conversion and compare transforms
+        # img1, img2 = Image.open(path1), Image.open(path2)
+        img1 = read_img(path1)
+        img2 = read_img(path2)
+
+        img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)  # test - visualize, can use visualize_crop
+        img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+
+        img1 = Image.fromarray(img1)
+        img2 = Image.fromarray(img2)
 
         if self.transform:
-            img1, img2 = self.transform(img1), self.transform(img2)
+            img1, img2 = self.transform(img1), self.transform(img2)  # if rescaling(tf) works, delete transform in main
 
         return img1, img2, label
 
