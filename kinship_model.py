@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 
 from facenet_pytorch import InceptionResnetV1

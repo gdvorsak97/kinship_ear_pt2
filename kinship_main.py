@@ -95,9 +95,9 @@ for i in range(len(val_famillies)):
 train_transform = transforms.Compose([
     transforms.Resize(224),
     transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
+    transforms.ToTensor(),  # this transforms values to [0,1]
     transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                         std=[0.5, 0.5, 0.5])
+                         std=[0.5, 0.5, 0.5])  # this transforms values to [-1,1]
 ])
 val_transform = transforms.Compose([
     transforms.Resize(224),

@@ -47,8 +47,6 @@ def plot_metrics(history):
 
 
 def visualize_crop(in_img, crp_img):
-    in_img = cv2.cvtColor(in_img, cv2.COLOR_BGR2RGB)
-    crp_img = cv2.cvtColor(crp_img, cv2.COLOR_BGR2RGB)
     fig, axes = plt.subplots(1, 2)
     axes[0].imshow(in_img[:, :, :])
     axes[0].set_title('Original image')
@@ -107,14 +105,13 @@ def crop_ears(img, region):
 # read images
 def read_img(path):
     in_img = cv2.imread(path)
+    in_img = in_img.astype('uint8')
+    in_img = cv2.cvtColor(in_img, cv2.COLOR_BGR2RGB)
     in_img = alignment(in_img, path)
     in_img = cv2.resize(in_img, (224, 224))
-    img = crop_ears(in_img, "top")
-    img = cv2.resize(img, (224, 224))
+    # img = crop_ears(in_img, "top")
+    img = cv2.resize(in_img, (224, 224))
     # visualize_crop(in_img, img)
-    img = np.array(img, dtype="float64")
-    img = preprocess_input(img, version=2)  # 1 for VGG, 2 otherwise
-    # img = rescale(img)  # resize and rescale are Resize and Normalize in torch
     return img
 
 

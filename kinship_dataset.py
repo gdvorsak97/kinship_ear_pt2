@@ -4,7 +4,7 @@ import cv2
 from PIL import Image
 from torch.utils.data import Dataset
 
-from kinship_utils import read_img
+from kinship_utils import read_img, visualize_crop
 
 
 class KinDataset(Dataset):
@@ -46,14 +46,17 @@ class KinDataset(Dataset):
         img1 = read_img(path1)
         img2 = read_img(path2)
 
-        img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)  # test - visualize, can use visualize_crop
-        img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+        # visualize_crop(img1, img2)
 
         img1 = Image.fromarray(img1)
         img2 = Image.fromarray(img2)
 
+        # img1.show()
+
         if self.transform:
             img1, img2 = self.transform(img1), self.transform(img2)  # if rescaling(tf) works, delete transform in main
+
+        # img1.show()
 
         return img1, img2, label
 
