@@ -6,6 +6,10 @@ from keras_vggface.utils import preprocess_input
 from tensorflow.python.keras.layers import Rescaling
 from tensorflow.python.keras.models import Sequential
 
+import torch
+from GPUtil import showUtilization as gpu_usage
+from numba import cuda
+
 colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
 
@@ -95,9 +99,9 @@ def crop_ears(img, region):
     return img
 
 
-rescale = Sequential([
-    Rescaling(1. / 255)
-])
+# rescale = Sequential([
+    # Rescaling(1. / 255)
+# ])
 
 
 # read images
@@ -110,5 +114,20 @@ def read_img(path):
     # visualize_crop(in_img, img)
     img = np.array(img, dtype="float64")
     img = preprocess_input(img, version=2)  # 1 for VGG, 2 otherwise
-    img = rescale(img)  # resize and rescale are Resize and Normalize in torch
+    # img = rescale(img)  # resize and rescale are Resize and Normalize in torch
     return img
+
+
+def free_gpu_cache():
+    print("Initial GPU Usage")
+    gpu_usage()
+
+    torch.cuda.empty_cache()
+
+    cuda.select_device(0)
+    cuda.close()
+    cuda.select_device(0)
+
+    print("GPU Usage after emptying the cache")
+    gpu_usage()
+

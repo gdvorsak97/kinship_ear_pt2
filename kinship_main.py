@@ -17,6 +17,8 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 
 # Get all images and split them into train and validation set
+from kinship_utils import free_gpu_cache
+
 print("Prepare data...")
 train_file_path = "D:/Files on Desktop/engine/fax/magistrska naloga/Ankitas Ears/train_list.csv"
 train_folders_path = "D:/Files on Desktop/engine/fax/magistrska naloga/Ankitas Ears/train/"
@@ -107,11 +109,12 @@ val_transform = transforms.Compose([
 train_set = KinDataset(train_relations, train_person_to_images_map, train_transform)
 val_set = KinDataset(val_relations, val_person_to_images_map, val_transform)
 
-train_loader = DataLoader(train_set, batch_size=200, shuffle=True)
-val_loader = DataLoader(val_set, batch_size=200, shuffle=False)
+train_loader = DataLoader(train_set, batch_size=2, shuffle=True)
+val_loader = DataLoader(val_set, batch_size=2, shuffle=False)
 
 # network and parameters
 print("Initialize network...")
+free_gpu_cache()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 net = SiameseNet().to(device)
 
