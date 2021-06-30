@@ -97,11 +97,6 @@ def crop_ears(img, region):
     return img
 
 
-# rescale = Sequential([
-    # Rescaling(1. / 255)
-# ])
-
-
 # read images
 def read_img(path):
     in_img = cv2.imread(path)
