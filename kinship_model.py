@@ -4,6 +4,7 @@ from facenet_pytorch import InceptionResnetV1
 
 
 class SiameseNet(nn.Module):
+    # TODO remember augmentation
     def __init__(self):
         super().__init__()
 
