@@ -41,7 +41,6 @@ class KinDataset(Dataset):
         im_np = np.asarray(im_pil)
         """
 
-        # TODO: test color conversion and compare transforms
         # img1, img2 = Image.open(path1), Image.open(path2)
         img1 = read_img(path1)
         img2 = read_img(path2)

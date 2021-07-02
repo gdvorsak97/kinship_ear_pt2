@@ -91,13 +91,16 @@ for i in range(len(val_famillies)):
 
 
 # Prepare data loaders
-# TODO: check the augmentation layers in kinship_ear and apply here
 train_transform = transforms.Compose([
     transforms.Resize(224),
     transforms.RandomHorizontalFlip(),
+    transforms.RandomRotation(45, expand=True),
+    transforms.RandomAffine(0, translate=(0.1, 0.1)),
+    transforms.Resize(224),
     transforms.ToTensor(),  # this transforms values to [0,1]
     transforms.Normalize(mean=[0.5, 0.5, 0.5],
                          std=[0.5, 0.5, 0.5])  # this transforms values to [-1,1]
+
 ])
 val_transform = transforms.Compose([
     transforms.Resize(224),
@@ -109,8 +112,8 @@ val_transform = transforms.Compose([
 train_set = KinDataset(train_relations, train_person_to_images_map, train_transform)
 val_set = KinDataset(val_relations, val_person_to_images_map, val_transform)
 
-train_loader = DataLoader(train_set, batch_size=2, shuffle=True)
-val_loader = DataLoader(val_set, batch_size=2, shuffle=False)
+train_loader = DataLoader(train_set, batch_size=16, shuffle=True)
+val_loader = DataLoader(val_set, batch_size=16, shuffle=False)
 
 # network and parameters
 print("Initialize network...")
