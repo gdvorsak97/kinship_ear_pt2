@@ -187,7 +187,7 @@ def validate():
 
 print("Start training...")
 # main training parameters
-num_epoch = 100
+num_epoch = 1
 
 best_val_loss = 1000
 best_epoch = 0
@@ -213,3 +213,4 @@ plt.plot([x[1] for x in history], 'r--', label='validation')
 plt.xlabel("Epochs")
 plt.ylabel("Loss")
 plt.legend()
+plt.show()
