@@ -1,4 +1,5 @@
 from random import choice
+import pandas as pd
 
 from PIL import Image
 from torch.utils.data import Dataset
@@ -6,27 +7,18 @@ from torch.utils.data import Dataset
 from kinship_utils import read_img, visualize_crop
 
 
-class KinDataset(Dataset):
+class KinDatasetTest(Dataset):
     # may have to use load_data from datasets.py
-    def __init__(self, relations, person_to_images_map, transform=None):
-        self.relations = relations
+    def __init__(self, test_dir, csv_file, transform=None):
+        self.test_dir = test_dir
+        self.results = pd.read_csv(csv_file)
         self.transform = transform
-        self.person_to_images_map = person_to_images_map
-        self.people = list(person_to_images_map.keys())
 
     def __getitem__(self, index):
-        if index % 2 == 0:  # Positive samples
-            p1, p2 = self.relations[index // 2]
-            label = 1
-        else:  # Negative samples
-            while True:
-                p1 = choice(self.people)
-                p2 = choice(self.people)
-                if p1 != p2 and (p1, p2) not in self.relations and (p2, p1) not in self.relations:
-                    break
-            label = 0
-
-        path1, path2 = choice(self.person_to_images_map[p1]), choice(self.person_to_images_map[p2])
+        items = self.results.img_pair.values[index]
+        path1 = self.test_dir + items.split("g-")[0] + 'g'
+        path2 = self.test_dir + items.split("g-")[1]
+        label = self.results.ground_truth.values[index]
 
         """
         #cv2 -> pil
@@ -59,4 +51,4 @@ class KinDataset(Dataset):
         return img1, img2, label
 
     def __len__(self):
-        return len(self.relations)*2
+        return len(self.results)

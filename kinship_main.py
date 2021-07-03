@@ -7,6 +7,7 @@ from glob import glob
 from collections import defaultdict
 
 from matplotlib import pyplot as plt
+from tqdm import tqdm
 
 from kinship_dataset import KinDataset
 from kinship_model import SiameseNet
@@ -17,7 +18,8 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 
 # Get all images and split them into train and validation set
-from kinship_utils import free_gpu_cache
+from kinship_predict import KinDatasetTest
+from kinship_utils import free_gpu_cache, read_img
 
 print("Prepare data...")
 train_file_path = "D:/Files on Desktop/engine/fax/magistrska naloga/Ankitas Ears/train_list.csv"
@@ -108,12 +110,23 @@ val_transform = transforms.Compose([
     transforms.Normalize(mean=[0.5, 0.5, 0.5],
                          std=[0.5, 0.5, 0.5])
 ])
+test_transform = transforms.Compose([
+    transforms.Resize(224),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.5, 0.5, 0.5],
+                         std=[0.5, 0.5, 0.5])
+])
+
+test_path = "D:\\Files on Desktop\\engine\\fax\\magistrska naloga\\Ankitas Ears\\test\\"
+test_file = 'D:\\Files on Desktop\\engine\\fax\\magistrska naloga\\Ankitas Ears\\test.csv'
 
 train_set = KinDataset(train_relations, train_person_to_images_map, train_transform)
 val_set = KinDataset(val_relations, val_person_to_images_map, val_transform)
+test_set= KinDatasetTest(test_path, test_file, test_transform)
 
 train_loader = DataLoader(train_set, batch_size=16, shuffle=True)
 val_loader = DataLoader(val_set, batch_size=16, shuffle=False)
+test_loader = DataLoader(test_set, batch_size=16, shuffle=False)
 
 # network and parameters
 print("Initialize network...")
@@ -185,6 +198,22 @@ def validate():
     return val_loss, running_corrects
 
 
+def test(net, test_loader):
+    predictions = []
+    batch_num = 1
+    for batch in test_loader:
+        img1, img2, label = batch
+        img1, img2, label = img1.to(device), img2.to(device), label.float().view(-1, 1).to(device)
+        with torch.no_grad():
+            output = net(img1, img2)
+            values = output.tolist()
+            for v in values:
+                predictions.append(v[0])
+        print("test batch " + str(batch_num))
+        batch_num += 1
+    return predictions
+
+
 print("Start training...")
 # main training parameters
 num_epoch = 1
@@ -214,3 +243,11 @@ plt.xlabel("Epochs")
 plt.ylabel("Loss")
 plt.legend()
 plt.show()
+
+
+predictions = test(net, test_loader)
+results = pd.read_csv(test_file)
+
+results['is_related'] = predictions
+results.to_csv("kinship_results_basic.csv", index=False)
+print("done")
