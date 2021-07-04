@@ -10,16 +10,15 @@ from matplotlib import pyplot as plt
 from tqdm import tqdm
 
 from kinship_dataset import KinDataset
-from kinship_model import SiameseNet
+from kinship_model_basic import SiameseNet
 
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
-
-# Get all images and split them into train and validation set
 from kinship_predict import KinDatasetTest
-from kinship_utils import free_gpu_cache, read_img
+from kinship_utils import free_gpu_cache
+from models import get_FasterRCNN_model
 
 print("Prepare data...")
 train_file_path = "D:/Files on Desktop/engine/fax/magistrska naloga/Ankitas Ears/train_list.csv"
@@ -122,7 +121,7 @@ test_file = 'D:\\Files on Desktop\\engine\\fax\\magistrska naloga\\Ankitas Ears\
 
 train_set = KinDataset(train_relations, train_person_to_images_map, train_transform)
 val_set = KinDataset(val_relations, val_person_to_images_map, val_transform)
-test_set= KinDatasetTest(test_path, test_file, test_transform)
+test_set = KinDatasetTest(test_path, test_file, test_transform)
 
 train_loader = DataLoader(train_set, batch_size=16, shuffle=True)
 val_loader = DataLoader(val_set, batch_size=16, shuffle=False)
@@ -132,6 +131,8 @@ test_loader = DataLoader(test_set, batch_size=16, shuffle=False)
 print("Initialize network...")
 free_gpu_cache()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+# TODO: MODEL
 net = SiameseNet().to(device)
 
 lr = 1e-3  # learning rate
