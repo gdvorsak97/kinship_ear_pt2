@@ -1,14 +1,16 @@
 import torch
 from torch import nn
 
+from aff_resnet import resnet152
+
 
 class SiameseNetAttention(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.encoder = None
+        self.encoder = resnet152(fuse_type='DAF', small_input=False)
 
-        emb_len = 512
+        emb_len = 1000
         self.last = nn.Sequential(
             nn.Linear(4 * emb_len, 200, bias=False),
             nn.BatchNorm1d(200, eps=0.001, momentum=0.1, affine=True),

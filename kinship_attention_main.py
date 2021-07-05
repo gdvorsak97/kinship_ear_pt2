@@ -118,9 +118,9 @@ train_set = KinDataset(train_relations, train_person_to_images_map, train_transf
 val_set = KinDataset(val_relations, val_person_to_images_map, val_transform)
 test_set = KinDatasetTest(test_path, test_file, test_transform)
 
-train_loader = DataLoader(train_set, batch_size=16, shuffle=True)
-val_loader = DataLoader(val_set, batch_size=16, shuffle=False)
-test_loader = DataLoader(test_set, batch_size=16, shuffle=False)
+train_loader = DataLoader(train_set, batch_size=8, shuffle=True)
+val_loader = DataLoader(val_set, batch_size=8, shuffle=False)
+test_loader = DataLoader(test_set, batch_size=8, shuffle=False)
 
 # network and parameters
 print("Initialize network...")
