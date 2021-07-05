@@ -1,24 +1,19 @@
-import torch
-import torch.nn as nn
+from collections import defaultdict
+from glob import glob
+
 import numpy as np
 import pandas as pd
-
-from glob import glob
-from collections import defaultdict
-
+import torch
+import torch.nn as nn
 from matplotlib import pyplot as plt
-from tqdm import tqdm
-
-from kinship_dataset import KinDataset
-from kinship_model_basic import SiameseNet
-
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from torch.optim.lr_scheduler import ReduceLROnPlateau
 
+from kinship_dataset import KinDataset
+from kinship_model_attention import SiameseNetAttention
 from kinship_predict import KinDatasetTest
 from kinship_utils import free_gpu_cache
-from models import get_FasterRCNN_model
 
 print("Prepare data...")
 train_file_path = "D:/Files on Desktop/engine/fax/magistrska naloga/Ankitas Ears/train_list.csv"
@@ -132,8 +127,7 @@ print("Initialize network...")
 free_gpu_cache()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-# TODO: MODEL
-net = SiameseNet().to(device)
+net = SiameseNetAttention().to(device)
 
 lr = 1e-3  # learning rate
 

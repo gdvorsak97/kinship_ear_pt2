@@ -1,21 +1,17 @@
-import torch
-import torch.nn as nn
+from collections import defaultdict
+from glob import glob
+
 import numpy as np
 import pandas as pd
-
-from glob import glob
-from collections import defaultdict
-
+import torch
+import torch.nn as nn
 from matplotlib import pyplot as plt
-from tqdm import tqdm
+from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.utils.data import DataLoader
+from torchvision import transforms
 
 from kinship_dataset import KinDataset
 from kinship_model_basic import SiameseNet
-
-from torch.utils.data import DataLoader
-from torchvision import transforms
-from torch.optim.lr_scheduler import ReduceLROnPlateau
-
 from kinship_predict import KinDatasetTest
 from kinship_utils import free_gpu_cache
 

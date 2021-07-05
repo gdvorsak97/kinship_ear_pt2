@@ -1,14 +1,12 @@
 import torch
 from torch import nn
 
-from facenet_pytorch import InceptionResnetV1
 
-
-class SiameseNet(nn.Module):
+class SiameseNetAttention(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.encoder = InceptionResnetV1(pretrained='vggface2')
+        self.encoder = None
 
         emb_len = 512
         self.last = nn.Sequential(
