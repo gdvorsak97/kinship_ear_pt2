@@ -211,7 +211,7 @@ def test(net, test_loader):
 
 print("Start training...")
 # main training parameters
-num_epoch = 1
+num_epoch = 40
 
 best_val_loss = 1000
 best_epoch = 0
@@ -244,5 +244,5 @@ predictions = test(net, test_loader)
 results = pd.read_csv(test_file)
 
 results['is_related'] = predictions
-results.to_csv("kinship_results_basic.csv", index=False)
+results.to_csv("kinship_results_attention.csv", index=False)
 print("done")

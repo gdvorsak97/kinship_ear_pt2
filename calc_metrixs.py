@@ -16,7 +16,7 @@ def plot_roc(name, labels, predictions, **kwargs):
 
 
 colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
-filename = "kinship_results_basic.csv"
+filename = "kinship_results_attention.csv"
 results = pd.read_csv(filename)
 
 pred = list(results['is_related'])

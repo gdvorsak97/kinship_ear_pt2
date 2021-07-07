@@ -2,13 +2,15 @@ import torch
 from torch import nn
 
 from aff_resnet import resnet152
+from fusion import MS_CAM
 
 
 class SiameseNetAttention(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.encoder = resnet152(fuse_type='DAF', small_input=False)
+        self.encoder = resnet152(fuse_type='DAF', small_input=False)    # TRY iAFF
+        # self.encoder = MS_CAM()
 
         emb_len = 1000
         self.last = nn.Sequential(
