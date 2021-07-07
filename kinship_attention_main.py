@@ -94,21 +94,21 @@ train_transform = transforms.Compose([
     transforms.RandomAffine(0, translate=(0.1, 0.1)),
     transforms.Resize(224),
     transforms.ToTensor(),  # this transforms values to [0,1]
-    transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                         std=[0.5, 0.5, 0.5])  # this transforms values to [-1,1]
+    # transforms.Normalize(mean=[0.5, 0.5, 0.5],
+    #                     std=[0.5, 0.5, 0.5])  # this transforms values to [-1,1]
 
 ])
 val_transform = transforms.Compose([
     transforms.Resize(224),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                         std=[0.5, 0.5, 0.5])
+    # transforms.Normalize(mean=[0.5, 0.5, 0.5],
+    #                     std=[0.5, 0.5, 0.5])
 ])
 test_transform = transforms.Compose([
     transforms.Resize(224),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                         std=[0.5, 0.5, 0.5])
+    # transforms.Normalize(mean=[0.5, 0.5, 0.5],
+    #                     std=[0.5, 0.5, 0.5])
 ])
 
 test_path = "D:\\Files on Desktop\\engine\\fax\\magistrska naloga\\Ankitas Ears\\test\\"
