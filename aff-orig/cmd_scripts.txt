@@ -1,0 +1,15 @@
+Before, you might need to run `export MXNET_SAFE_ACCUMULATION=1`
+
+## CIFAR-100
+
+python train_cifar.py --model resnet --askc-type ASKCFuse --auto_aug --mixup --label-smoothing --cosine --no-wd --blocks 5
+
+python train_cifar.py --model resnext --askc-type ASKCFuse --auto_aug --mixup --label-smoothing --cosine --no-wd --blocks 4
+
+## ImageNet
+
+python train_imagenet.py --model resnext --askc-type ResGlobLocaforGlobLocaCha --label-smoothing --mixup --auto_aug --last-gamma --no-wd --use-rec --save-dir params_iaff_resnext50_aff --logging-file iaff_resnext50_aff.log --rec-train '/xdisk/kobus/yimian/imagenet/rec/train.rec' --rec-train-idx '/xdisk/kobus/yimian/imagenet/rec/train.idx' --rec-val '/xdisk/kobus/yimian/imagenet/rec/val.rec' --rec-val-idx '/xdisk/kobus/yimian/imagenet/rec/val.idx' --save-frequency 1 --save-dir /xdisk/kobus/yimian/iaff_resnext50_params
+
+python train_imagenet.py --model resnet --askc-type ResGlobLocaforGlobLocaCha --label-smoothing --mixup --auto_aug --last-gamma --no-wd --use-rec --save-dir params_iaff_resnet50 --logging-file iaff_resnet50.log --rec-train '/xdisk/kobus/yimian/imagenet/rec/train.rec' --rec-train-idx '/xdisk/kobus/yimian/imagenet/rec/train.idx' --rec-val '/xdisk/kobus/yimian/imagenet/rec/val.rec' --rec-val-idx '/xdisk/kobus/yimian/imagenet/rec/val.idx' --save-frequency 1 --save-dir /xdisk/kobus/yimian/iaff_resnet50_params
+
+python train_imagenet.py --model resnext --askc-type ASKCFuse --label-smoothing --mixup --auto_aug --last-gamma --no-wd --use-rec --save-dir params_aff_resnext50_aff --logging-file aff_resnext50.log --rec-train '/xdisk/kobus/yimian/imagenet/rec/train.rec' --rec-train-idx '/xdisk/kobus/yimian/imagenet/rec/train.idx' --rec-val '/xdisk/kobus/yimian/imagenet/rec/val.rec' --rec-val-idx '/xdisk/kobus/yimian/imagenet/rec/val.idx' --save-frequency 1 --save-dir /xdisk/kobus/yimian/aff_resnext50_params

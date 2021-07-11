@@ -16,15 +16,14 @@ transform = transforms.Compose(
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
 batch_size = 4
+path = "D:\\Files on Desktop\\engine\\fax\\magistrska naloga\\Imagenet\\Data\\CLS-LOC"
 
-train_set = torchvision.datasets.ImageNet(root='./data', train=True, transform=transform)
+train_set = torchvision.datasets.ImageNet(root=path, train=True, transform=transform)
 train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)
 
-test_set = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+test_set = torchvision.datasets.ImageNet(root=path, train=False, transform=transform)
 test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2)
 
-classes = ('plane', 'car', 'bird', 'cat',
-           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')  # CHANGE!
 
 free_gpu_cache()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
