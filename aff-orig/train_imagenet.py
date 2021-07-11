@@ -23,7 +23,7 @@ gcv.utils.check_version('0.6.0')
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a model for image classification.')
     parser.add_argument('--data-dir', type=str,
-                        default='D:\\Files on Desktop\\engine\\fax\\magistrska naloga\\Imagenet\\Data\\CLS-LOC',
+                        default='D:\\Files on Desktop\\engine\\fax\\magistrska naloga\\Imagenet\\subset\\data',
                         help='training and validation pictures to use.')
     parser.add_argument('--rec-train', type=str, default='~/.mxnet/datasets/imagenet/rec/train.rec',
                         help='the training data')
@@ -49,7 +49,7 @@ def parse_args():
                         help='ASKCFuse, ResGlobLocaforGlobLocaCha')
     parser.add_argument('--num-gpus', type=int, default=1,
                         help='number of gpus to use.')
-    parser.add_argument('-j', '--num-data-workers', dest='num_workers', default=96, type=int,
+    parser.add_argument('-j', '--num-data-workers', dest='num_workers', default=1, type=int,
                         help='number of preprocessing workers')
     parser.add_argument('--num-epochs', type=int, default=240,
                         help='number of training epochs.')
