@@ -14,8 +14,6 @@ from kinship_utils import free_gpu_cache
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                         std=[0.5, 0.5, 0.5])
 ])
 
 batch_size = 4
@@ -89,5 +87,5 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
-print('Accuracy of the network on the 10000 test images: %d %%' % (
+print('Accuracy of the network on the test images: %d %%' % (
     100 * correct / total))
