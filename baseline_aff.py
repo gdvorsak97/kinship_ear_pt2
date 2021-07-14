@@ -1,11 +1,12 @@
 import torch
 import torchvision
 import torchvision.transforms as transforms
+from matplotlib import pyplot as plt
 from torch import nn
 from torch.optim import SGD
 from torch.utils.data import DataLoader
 
-from aff_resnet import resnet152
+from aff_resnet import resnet152, resnet18
 from kinship_utils import free_gpu_cache
 
 # Find a tutorial on how to train a net on imagenet in pytorch or just copy the basic example and use this loader
@@ -31,17 +32,19 @@ test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False)
 free_gpu_cache()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-net = resnet152(fuse_type='DAF', small_input=False).to(device)
+net = resnet18(fuse_type='DAF', small_input=False).to(device)
 
 criterion = nn.CrossEntropyLoss()
 optimizer = SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-NUM_EPOCHS = 10
+NUM_EPOCHS = 2
 
 
 def train():
     net.train()
     running_loss = 0.0
+    train_loss = 0.0
+
     for i, data in enumerate(train_loader):
         # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data[0].to(device), data[1].to(device)
@@ -56,17 +59,32 @@ def train():
         optimizer.step()
 
         # print statistics
+        train_loss += loss.item()
         running_loss += loss.item()
-        if i % 2000 == 1999:    # print every 2000 mini-batches
-            print('[%5d] loss: %.3f' %
-                  ( i + 1, running_loss / 2000))
+
+        step = 500
+        if i % step == step - 1:
+            print(' [{} - {:.2f}%],\ttrain loss: {:.5}'.format(epoch + 1, 100 * (i + 1) / len(train_loader),
+                                                               running_loss / step / 200))
             running_loss = 0.0
 
+    train_loss /= len(train_set)
+    print('[{}], \ttrain loss: {:.5}'.format(epoch + 1, train_loss))
+    return train_loss
 
+
+history = []
 for epoch in range(NUM_EPOCHS):  # loop over the dataset multiple times
-    train()
+    train_loss = train()
+    history.append(train_loss)
 
 print('Finished Training')
+
+plt.plot([x for x in history], 'b', label='train')
+plt.xlabel("Epochs")
+plt.ylabel("Loss")
+plt.legend()
+plt.show()
 
 # save model
 # PATH = './image_net.pth'
