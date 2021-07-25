@@ -6,7 +6,7 @@ from torch import nn
 from torch.optim import SGD
 from torch.utils.data import DataLoader
 
-from aff_resnet import resnet152, resnet18
+from aff_resnet import resnet152, resnet18, resnet34, resnet50, resnet101
 from kinship_utils import free_gpu_cache
 
 # Find a tutorial on how to train a net on imagenet in pytorch or just copy the basic example and use this loader
@@ -32,12 +32,12 @@ test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False)
 free_gpu_cache()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-net = resnet18(fuse_type='DAF', small_input=False).to(device)
+net = resnet152(fuse_type='DAF', small_input=False).to(device)
 
 criterion = nn.CrossEntropyLoss()
 optimizer = SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-NUM_EPOCHS = 2
+NUM_EPOCHS = 50
 
 
 def train():
