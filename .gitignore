@@ -137,3 +137,5 @@ Papers/
 **/*.pth
 **/*.sh
 **/*.zip
+/CoTNet/
+

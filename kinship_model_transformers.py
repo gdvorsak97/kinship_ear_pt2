@@ -3,11 +3,10 @@ from torch import nn
 from CoTNet.models import cotnet50
 
 
-class SiameseNetAttention(nn.Module):
+class SiameseNetTransformers(nn.Module):
     def __init__(self):
         super().__init__()
 
-        # TODO: try it out and debug? If it's not working, delete the CoTNet repo folder
         self.encoder = cotnet50()
 
         emb_len = 1000
