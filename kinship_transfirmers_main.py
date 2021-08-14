@@ -92,7 +92,11 @@ train_transform = transforms.Compose([
     transforms.Resize(224),
     transforms.RandomHorizontalFlip(),
     transforms.RandomRotation(45, expand=True),
-    transforms.RandomAffine(0, translate=(0.1, 0.1)),
+    transforms.RandomAffine(0, translate=(0.3, 0.3)),
+    transforms.ColorJitter(brightness=0.2, hue=0.2),
+    transforms.GaussianBlur(kernel_size=(5, 9), sigma=(0.1, 5)),
+    transforms.RandomSolarize(threshold=192.0),
+    transforms.RandomAdjustSharpness(sharpness_factor=2),
     transforms.Resize(224),
     transforms.ToTensor(),  # this transforms values to [0,1]
     # transforms.Normalize(mean=[0.5, 0.5, 0.5],
