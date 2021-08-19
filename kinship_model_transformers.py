@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from CoTNet.models import cotnet50
+from CoTNet.models import cotnet50, cotnet101
 
 
 class SiameseNetTransformers(nn.Module):
