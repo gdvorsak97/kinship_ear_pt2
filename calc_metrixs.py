@@ -53,5 +53,4 @@ print('ROC-AUC:\t\t ' + str(auc))
 
 
 plot_roc("Test Baseline", truth, pred, color=colors[0])
-plt.legend(loc='lower right')
 plt.show()

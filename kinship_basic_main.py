@@ -28,7 +28,7 @@ all_files = [str(i).split("/")[-1][:-4] for i in all_images]
 delete_path = "D:\\Files on Desktop\\engine\\fax\\magistrska naloga\\Ankitas Ears\\bounding boxes alligment" \
               "\\delete list.txt"
 delete_file = pd.read_csv(delete_path, delimiter=";")
-FILTERS = "maj_oob,mnr_oob,blr,ilu,drk,grn,lbl"
+FILTERS = "major_out_of_bounds,minor_out_of_bounds,blurry,illuminated,dark,green,label"
 filters = FILTERS.replace(" ", "")
 filters = filters.split(",")
 deleted = []

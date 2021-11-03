@@ -1,5 +1,6 @@
 from collections import defaultdict
 from glob import glob
+from torch.utils.tensorboard import SummaryWriter
 
 import numpy as np
 import pandas as pd
@@ -15,6 +16,8 @@ from kinship_model_attention import SiameseNetAttention
 from kinship_predict import KinDatasetTest
 from kinship_utils import free_gpu_cache
 
+writer = SummaryWriter()
+
 print("Prepare data...")
 train_file_path = "D:/Files on Desktop/engine/fax/magistrska naloga/Ankitas Ears/train_list.csv"
 train_folders_path = "D:/Files on Desktop/engine/fax/magistrska naloga/Ankitas Ears/train/"
@@ -28,7 +31,7 @@ all_files = [str(i).split("/")[-1][:-4] for i in all_images]
 delete_path = "D:\\Files on Desktop\\engine\\fax\\magistrska naloga\\Ankitas Ears\\bounding boxes alligment" \
               "\\delete list.txt"
 delete_file = pd.read_csv(delete_path, delimiter=";")
-FILTERS = "maj_oob,mnr_oob,blr,ilu,drk,grn,lbl"
+FILTERS = "major_out_of_bounds,minor_out_of_bounds,blurry,illuminated,dark,green,label"
 filters = FILTERS.replace(" ", "")
 filters = filters.split(",")
 deleted = []
@@ -167,6 +170,7 @@ def train():
     train_loss /= len(train_set)
     running_corrects = running_corrects.item() / len(train_set)
     print('[{}], \ttrain loss: {:.5}\tacc: {:.5}'.format(epoch + 1, train_loss, running_corrects))
+    writer.add_scalar('training loss', train_loss, epoch + 1)
     return train_loss, running_corrects
 
 
@@ -189,6 +193,7 @@ def validate():
     val_loss /= len(val_set)
     running_corrects = running_corrects.item() / len(val_set)
     print('[{}], \tval loss: {:.5}\tacc: {:.5}'.format(epoch + 1, val_loss, running_corrects))
+    writer.add_scalar('validation loss', val_loss, epoch + 1)
 
     return val_loss, running_corrects
 
@@ -211,7 +216,7 @@ def test(net, test_loader):
 
 print("Start training...")
 # main training parameters
-num_epoch = 50
+num_epoch = 40
 
 best_val_loss = 1000
 best_epoch = 0
@@ -233,7 +238,7 @@ for epoch in range(num_epoch):
 torch.save(net.state_dict(), 'net_full_training.pth')
 
 plt.plot([x[0] for x in history], 'b', label='train')
-plt.plot([x[1] for x in history], 'r--', label='validation')
+plt.plot([x[1] for x in history], 'b--', label='validation')
 plt.xlabel("Epochs")
 plt.ylabel("Loss")
 plt.legend()

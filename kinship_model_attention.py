@@ -9,7 +9,7 @@ class SiameseNetAttention(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.encoder = resnet50(fuse_type='DAF', small_input=False)
+        self.encoder = resnet18(fuse_type='DAF', small_input=False)
         # self.encoder = MS_CAM()
 
         emb_len = 1000
