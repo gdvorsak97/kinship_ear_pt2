@@ -103,8 +103,8 @@ def read_img(path):
     in_img = in_img.astype('uint8')
     in_img = cv2.cvtColor(in_img, cv2.COLOR_BGR2RGB)
     in_img = alignment(in_img, path)
-    in_img = cv2.resize(in_img, (224, 224))
-    # img = crop_ears(in_img, "top")
+    # in_img = cv2.resize(in_img, (224, 224))
+    # in_img = crop_ears(in_img, "right")
     img = cv2.resize(in_img, (224, 224))
     # visualize_crop(in_img, img)
     return img

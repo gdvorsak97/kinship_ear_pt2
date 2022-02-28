@@ -14,7 +14,7 @@ class SiameseNetAttention(nn.Module):
 
         emb_len = 1000
         self.last = nn.Sequential(
-            nn.Linear(4 * emb_len, 200, bias=False),
+            nn.Linear(2 * emb_len, 200, bias=False),
             nn.BatchNorm1d(200, eps=0.001, momentum=0.1, affine=True),
             nn.ReLU(),
             nn.Linear(200, 1)
@@ -24,12 +24,14 @@ class SiameseNetAttention(nn.Module):
         emb1 = self.encoder(input1)
         emb2 = self.encoder(input2)
 
-        x1 = torch.pow(emb1, 2) - torch.pow(emb2, 2)
-        x2 = torch.pow(emb1 - emb2, 2)
-        x3 = emb1 * emb2
-        x4 = emb1 + emb2
+        # x1 = torch.pow(emb1, 2) - torch.pow(emb2, 2)
+        # x2 = torch.pow(emb1 - emb2, 2)
+        # x3 = emb1 * emb2
+        # x4 = emb1 + emb2
 
-        x = torch.cat((x1, x2, x3, x4), dim=1)
+        # x = torch.cat((x1, x2, x3, x4), dim=1)
+
+        x = torch.cat((emb1, emb2), dim=1)
         x = self.last(x)
 
         return x
